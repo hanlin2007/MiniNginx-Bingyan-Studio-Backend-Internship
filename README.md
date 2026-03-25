@@ -4,8 +4,13 @@
 
 MiniNginx是一个基于 C++ 实现的轻量级 Web 服务器与反向代理项目，实现了HTTP 请求解析与响应构造、静态资源代理服务、反向代理转发、配置驱动路由、`epoll` 多路复用、配置热重载能力等核心功能。在这个README文档中，我将详细介绍各个阶段的核心任务实现，同时记录详细的工具使用和开发日志。
 
+<p align="center">
+  <img src="./assets/images/欢迎页面展示1.png" alt="欢迎页面展示1" width="100%" />
+</p>
 
-
+<p align="center">
+  <img src="./assets/images/欢迎页面展示2.png" alt="欢迎页面展示2" width="100%" />
+</p>
 
 ### 第0阶段：环境配置和工具链搭建（v0.1）
 
