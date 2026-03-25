@@ -3,52 +3,54 @@
 
 #include "http/Request.h"
 #include "http/Response.h"
-#include "handlers/StaticHandler.h"
-#include "handlers/ProxyHandler.h"
+#include "config/Config.h"
+
 #include <string>
-#include <memory>
+#include <filesystem>
+#include <unordered_map>
+#include <chrono>
 
 class Server {
-private:
-    int port;
-    int server_fd;
-    bool running;
-    
-    // 硬编码配置
-    std
-::string static_root = "./static";
-    std
-::string proxy_target_host = "127.0.0.1";
-    int proxy_target_port = 7000;
-    std
-::string proxy_host_header = "test.com";
-    
 public:
-    Server(int port = 8080);  // 确保这行存在且正确
+    explicit Server(const std::string& config_path);
     ~Server();
-    
-    // 启动服务器
+
     bool start();
-    
-    // 停止服务器
     void stop();
-    
-    // 检查服务器是否在运行
-    bool isRunning() const { return running; }
-    
+    bool isRunning() const { return running_; }
+
 private:
-    // 处理客户端连接
-    void handleClient(int client_fd);
-    
-    // 路由请求到适当的处理器
-    Response 
-routeRequest(const Request& request);
-    
-    // 发送响应给客户端
-    void sendResponse(int client_fd, const Response& response);
-    
-    // 初始化服务器socket
+    struct ClientState {
+        std::string recv_buffer;
+    };
+
+    std::string config_path_;
+    GlobalConfig config_;
+
+    int listen_port_ = 8080;
+    int server_fd_ = -1;
+    int epoll_fd_ = -1;
+    bool running_ = false;
+
+    std::unordered_map<int, ClientState> clients_;
+
+    std::filesystem::file_time_type config_last_write_time_{};
+    std::chrono::steady_clock::time_point last_reload_check_{};
+
+    bool loadConfig();
     bool initializeSocket();
+
+    void eventLoop();
+    void acceptClient();
+    void handleClientReadable(int client_fd);
+
+    Response routeRequest(const Request& request);
+    void sendResponseAndClose(int client_fd, const Response& response);
+
+    void maybeReloadConfig();
+
+    static bool setNonBlocking(int fd);
+    static void closeFd(int fd);
 };
 
 #endif

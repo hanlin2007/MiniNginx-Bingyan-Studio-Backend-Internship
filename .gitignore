@@ -1,26 +1,51 @@
-# 编译输出
+# =========================
+# Build artifacts
+# =========================
 build/
+out/
+bin/
+obj/
+
+# C/C++ objects and libraries
 *.o
+*.obj
+*.lo
+*.la
 *.a
+*.lib
 *.so
+*.dll
+*.dylib
 
-# 可执行文件
+# Executables
 MiniNginx
+MiniNginx.exe
+*.exe
+*.out
 
-# CMake生成文件
+# =========================
+# CMake generated files
+# =========================
 CMakeCache.txt
 CMakeFiles/
 cmake_install.cmake
 Makefile
+compile_commands.json
+CTestTestfile.cmake
 
-# 日志文件
+# =========================
+# Logs / temp / OS junk
+# =========================
 *.log
-
-# 临时文件
 *.tmp
+*.temp
 *.swp
 *~
+.DS_Store
+Thumbs.db
 
-# IDE文件
+# =========================
+# IDE / editor
+# =========================
 .vscode/
 .idea/

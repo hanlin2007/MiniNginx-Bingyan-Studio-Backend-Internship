@@ -1,26 +1,368 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN" data-theme="dark">
 <head>
-    <title>MiniNginx Static Test</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MiniNginx | Welcome</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        h1 { color: #2c3e50; }
-        .container { max-width: 800px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
-        .success { color: #27ae60; font-weight: bold; }
+        :root {
+            --bg-a: #0b0f2f;
+            --bg-b: #1a2e7a;
+            --bg-c: #7d38c2;
+            --bg-d: #07aeb8;
+            --bg-e: #14204d;
+
+            --surface: rgba(255, 255, 255, 0.2);
+            --surface-strong: rgba(255, 255, 255, 0.28);
+            --card-bg: rgba(255, 255, 255, 0.16);
+            --text: #eef4ff;
+            --muted: #d4e2ff;
+            --line: rgba(255, 255, 255, 0.4);
+            --accent: #85ffe7;
+            --accent-2: #d5a7ff;
+            --shadow: 0 16px 45px rgba(0, 12, 46, 0.24);
+            --hero-start-delay: .06s;
+        }
+
+        :root[data-theme="light"] {
+            --bg-a: #a6d9ff;
+            --bg-b: #8acbff;
+            --bg-c: #caa2ff;
+            --bg-d: #8fffe7;
+            --bg-e: #f7f5ff;
+
+            --surface: rgba(255, 255, 255, 0.5);
+            --surface-strong: rgba(255, 255, 255, 0.66);
+            --card-bg: rgba(255, 255, 255, 0.42);
+            --text: #152347;
+            --muted: #2e4f7f;
+            --line: rgba(58, 99, 171, 0.32);
+            --accent: #0ea890;
+            --accent-2: #8438d6;
+            --shadow: 0 14px 38px rgba(35, 74, 144, 0.16);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-family: "Inter", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            color: var(--text);
+            background: linear-gradient(-45deg, var(--bg-a), var(--bg-b), var(--bg-c), var(--bg-d), var(--bg-e));
+            background-size: 380% 380%;
+            animation: flowBg 13.5s ease infinite;
+            transition: color .25s ease, background .35s ease;
+        }
+
+        @keyframes flowBg {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 50% 100%; }
+            50% { background-position: 100% 50%; }
+            75% { background-position: 50% 0%; }
+            100% { background-position: 0% 50%; }
+        }
+
+
+        .wrap {
+            width: min(1060px, 92vw);
+            margin: 7vh auto;
+            position: relative;
+            z-index: 1;
+            perspective: 1200px;
+        }
+
+        .hero {
+            position: relative;
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            padding: 34px;
+            background: var(--surface);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(120deg, rgba(255, 255, 255, 0.2), transparent 28%, rgba(255, 255, 255, 0.12) 58%, transparent 76%);
+            pointer-events: none;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: var(--surface-strong);
+            color: var(--accent);
+            font-size: 12px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        .theme-btn {
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 8px 14px;
+            background: var(--surface-strong);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: transform .2s ease, filter .2s ease;
+        }
+
+        .theme-btn:hover { transform: translateY(-1px); filter: brightness(1.06); }
+
+        h1 {
+            margin: 14px 0 0;
+            font-size: clamp(30px, 5vw, 56px);
+            line-height: 1.08;
+        }
+
+        .grad {
+            color: transparent;
+            background: linear-gradient(90deg, #80c8ff, #8bffe9, #e0adff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            background-size: 180% 180%;
+            animation: gradMove 8s ease infinite;
+        }
+
+        @keyframes gradMove {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .desc {
+            margin-top: 14px;
+            max-width: 760px;
+            color: var(--muted);
+            line-height: 1.72;
+            font-size: 16px;
+        }
+
+        .spark {
+            display: inline-block;
+            color: var(--accent);
+            filter: drop-shadow(0 0 8px rgba(133, 255, 231, 0.7));
+            animation: pulse 1.8s ease-in-out infinite;
+            margin: 0 3px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.72; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        .grid {
+            margin-top: 28px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 14px;
+        }
+
+        .card {
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 16px;
+            background: var(--card-bg);
+            transform-style: preserve-3d;
+            transition: transform .18s ease, border-color .18s ease, background .18s ease;
+            will-change: transform;
+        }
+
+        .card:hover {
+            border-color: rgba(255, 255, 255, 0.72);
+            background: var(--surface-strong);
+        }
+
+        .card h3 {
+            margin: 0 0 8px;
+            font-size: 15px;
+            color: transparent;
+            background: linear-gradient(90deg, #f2f8ff, #d4fff5, #efdbff);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        .card a {
+            display: inline-block;
+            margin-top: 5px;
+            text-decoration: none;
+            color: var(--text);
+            transition: color .2s ease, transform .2s ease;
+        }
+
+        .card a:hover {
+            color: var(--accent);
+            transform: translateX(2px);
+        }
+
+        .terminal {
+            margin-top: 20px;
+            border-radius: 14px;
+            border: 1px solid var(--line);
+            overflow: hidden;
+            background: var(--surface-strong);
+        }
+
+        .term-head {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .d1 { background: #ff6f7a; }
+        .d2 { background: #ffd56a; }
+        .d3 { background: #34f2b0; }
+
+        pre {
+            margin: 0;
+            padding: 16px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-size: 13px;
+            line-height: 1.68;
+            color: var(--text);
+            opacity: .94;
+        }
+
+        .footer {
+            margin-top: 18px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(18px) scale(.98);
+            animation: reveal .8s cubic-bezier(.2, .7, .2, 1) forwards;
+            animation-delay: calc(var(--hero-start-delay) + var(--delay, 0s));
+        }
+
+        @keyframes reveal {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero { padding: 24px; }
+            .desc { font-size: 15px; }
+            .toolbar { flex-direction: column; align-items: flex-start; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>MiniNginx Static File Server</h1>
-        <p class="success">✓ Static file serving is working correctly!</p>
-        <p>This page is served from a static HTML file located at: <code>static/index.html</code></p>
-        
-        <h3>Available Test Files:</h3>
-        <ul>
-            <li><a href="/">Back to Home</a></li>
-            <li><a href="/static/images/test.txt">Test Text File</a></li>
-            <li><a href="/static/nonexistent.txt">Test 404 Error</a></li>
-        </ul>
-    </div>
+    <main class="wrap">
+        <section class="hero reveal" style="--delay:.02s;">
+            <div class="toolbar reveal" style="--delay:.08s;">
+                <span class="badge">MiniNginx · Linux · Epoll</span>
+                <button id="themeBtn" class="theme-btn" type="button">切换到浅色模式</button>
+            </div>
+
+            <h1 class="reveal" style="--delay:.14s;">欢迎来到 <span class="grad">MiniNginx</span></h1>
+            <p class="desc reveal" style="--delay:.2s;">
+                你的 C++ 反向代理与静态资源服务器已经在线。
+                现在可以直接测试静态文件映射、API 转发和配置驱动路由，
+                点亮你的服务端实验场 <span class="spark">✦</span>。
+            </p>
+
+            <div class="grid reveal" style="--delay:.28s;">
+                <div class="card" data-tilt>
+                    <h3>静态资源</h3>
+                    <a href="/static/index.html">/static/index.html</a><br/>
+                    <a href="/static/images/test.txt">/static/images/test.txt</a>
+                </div>
+                <div class="card" data-tilt>
+                    <h3>反向代理</h3>
+                    <a href="/api/v1/healthy">/api/v1/healthy</a>
+                </div>
+                <div class="card" data-tilt>
+                    <h3>错误页测试</h3>
+                    <a href="/static/not-found.txt">/static/not-found.txt</a>
+                </div>
+            </div>
+
+            <div class="terminal reveal" style="--delay:.38s;">
+                <div class="term-head">
+                    <span class="dot d1"></span>
+                    <span class="dot d2"></span>
+                    <span class="dot d3"></span>
+                    <span style="margin-left:8px;color:var(--muted);font-size:12px;">quick test commands</span>
+                </div>
+                <pre>curl -i http://127.0.0.1:8080/static/index.html
+curl -i http://127.0.0.1:8080/static/images/test.txt
+curl -i http://127.0.0.1:8080/api/v1/healthy</pre>
+            </div>
+
+            <p class="footer reveal" style="--delay:.48s;">Built with C++ / socket / epoll · Powered by your MiniNginx</p>
+        </section>
+    </main>
+
+    <script>
+        (function () {
+            const root = document.documentElement;
+            const cards = document.querySelectorAll('[data-tilt]');
+            const themeBtn = document.getElementById('themeBtn');
+            const THEME_KEY = 'mininginx-theme';
+
+            const savedTheme = localStorage.getItem(THEME_KEY);
+            if (savedTheme === 'light' || savedTheme === 'dark') {
+                root.setAttribute('data-theme', savedTheme);
+            }
+
+            function syncThemeButton() {
+                const isLight = root.getAttribute('data-theme') === 'light';
+                themeBtn.textContent = isLight ? '切换到暗色模式' : '切换到浅色模式';
+            }
+            syncThemeButton();
+
+            themeBtn.addEventListener('click', function () {
+                const isLight = root.getAttribute('data-theme') === 'light';
+                const next = isLight ? 'dark' : 'light';
+                root.setAttribute('data-theme', next);
+                localStorage.setItem(THEME_KEY, next);
+                syncThemeButton();
+            });
+
+            cards.forEach(function (card) {
+                card.addEventListener('mousemove', function (e) {
+                    const rect = card.getBoundingClientRect();
+                    const px = (e.clientX - rect.left) / rect.width;
+                    const py = (e.clientY - rect.top) / rect.height;
+                    const rotateY = (px - 0.5) * 14;
+                    const rotateX = (0.5 - py) * 12;
+                    card.style.transform = 'perspective(900px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateY(-4px)';
+                });
+
+                card.addEventListener('mouseleave', function () {
+                    card.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+                });
+            });
+        })();
+    </script>
 </body>
 </html>
