@@ -1,4 +1,4 @@
-# hanlinprograme（Backend Internship Project of Bingyan Studio）
+# Backend Internship Project of Bingyan Studio
 
 **冰岩国庆后端实习项目MiniNginx简介**
 Nginx是一个轻量级的Web服务器以及反向代理服务器，该代理服务实现两个主要功能：将请求转发到下游地址和静态文件服务器
@@ -52,4 +52,5 @@ make
 ./MiniNginx
 学习手段：Ai工具反复追问和试错debug
 感悟：最终一个项目的成功就是把遇到的问题一个个解决，真的实践中会遇到的错误太多太多了
+
 另外感觉现在网上缺乏工具链路的搭建教程，新手小白确实完全不知道很多操作细节，容易产生很多错误
